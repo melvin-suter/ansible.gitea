@@ -1,0 +1,52 @@
+---
+  - name: Install Nginx
+    yum:
+      name: nginx
+      state: present
+
+  - name: Copy Nginx config file
+    template:
+      src: templates/gitea.conf.j2
+      owner: nginx
+      group: root
+      dest: /etc/nginx/conf.d/gitea.conf
+      owner: root
+      group: nginx
+      mode: 0750
+
+  - name: Create self-signed certificate, if configured.
+    command: >
+      openssl req -x509 -nodes -subj '/CN={{ gitea_domain }}' -days 365
+      -newkey rsa:4096 -sha256 -keyout {{ nginx_ssl_cert_key }} -out {{ nginx_ssl_cert_crt }}
+      creates={{ nginx_ssl_cert_crt }}
+
+  - name: Set httpd_can_network_connect flag on and keep it persistent across reboots
+    seboolean:
+      name: httpd_can_network_connect
+      state: yes
+      persistent: yes
+
+
+  - name: Enable & Restart Nginx
+    systemd:
+      name: nginx
+      state: restarted
+      enabled: yes
+
+  - name: Open Firewall
+    firewalld:
+      zone: public
+      service: "{{ item }}"
+      permanent: yes
+      state: enabled
+    with_items:
+      - https
+      - http
+
+      
+  - name: Restart firewall
+    systemd:
+      name: firewalld
+      state: restarted
+
+...

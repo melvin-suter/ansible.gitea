@@ -1,0 +1,9 @@
+---
+- name: check if local var file "/etc/ansible/{{ ansible_nodename }}.yml" exists
+  stat:
+    path: "/etc/ansible/{{ ansible_nodename }}.yml"
+  register: local_varfile
+- name: Load a variable file "/etc/ansible/{{ ansible_nodename }}.yml"
+  include_vars: "/etc/ansible/{{ ansible_nodename }}.yml"
+  when: local_varfile.stat.exists
+

@@ -1,0 +1,28 @@
+---
+# asible.gitea/tasks/main.yml
+- import_tasks: include-vars.yml
+
+# filesystem preparation
+- import_tasks: prep-fs.yml
+  tags: ['gitea','gitea.prep-fs']
+
+# git verison 2 installation
+- import_tasks: git2u.yml
+  tags: ['gitea','gitea.git2u']
+
+# giteat installation
+- import_tasks: gitea.yml
+  tags: ['gitea','gitea.gitea']
+
+# nginx installation
+- import_tasks: nginx.yml
+  tags: ['gitea','gitea.nginx']
+
+# fail2ban installation
+- import_tasks: fail2ban.yml
+  tags: ['gitea','gitea.fail2ban']
+
+# letsencrypt installation
+- import_tasks: letsencrypt.yml
+  tags: ['gitea','gitea.letsencrypt']
+...

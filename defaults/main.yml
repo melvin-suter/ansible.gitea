@@ -1,0 +1,50 @@
+---
+# --- Gitea "Frontend" ---
+gitea_domain: gitea.server.fqdn
+gitea_url: https://{{ gitea_domain }}
+gitea_domain_aliases:
+
+# --- Gitea "Backend" ---
+gitea_bind_address: 127.0.0.1
+gitea_bind_port: 3000
+gitea_ssh_port: 22
+gitea_ssh_domain: "{{ gitea_domain }}"
+gitea_ssh_bind_address: 0.0.0.0
+gitea_config_file: /opt/gitea/config.ini
+gitea_bin_dir: /opt/gitea/bin
+gitea_working_dir: /opt/gitea/data
+gitea_repo_dir: "{{ gitea_working_dir }}/repos"
+gitea_log_dir: "{{ gitea_working_dir }}/logs"
+gitea_backup_dir: /opt/gitea/backups
+gitea_service_user: gitea
+gitea_service_group: gitea
+gitea_config_overwrite: no
+
+
+# --- Gitea DB ---
+gitea_mysql_host: '127.0.0.1:3306'
+gitea_mysql_user: gitea
+gitea_mysql_pass: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters') }}"
+gitea_mysql_database: gitea
+
+# --- Nginx Reverse Proxy ---
+nginx_redirect_http: no
+nginx_service_user: gitea
+nginx_service_group: gitea
+nginx_ssl_port: 443
+nginx_ssl_cert_dir: /opt/gitea_ssl
+nginx_ssl_cert_crt: "{{ nginx_ssl_cert_dir }}/cert.pem"
+nginx_ssl_cert_key: "{{ nginx_ssl_cert_dir }}/key.pem"
+nginx_ssl_csr: "{{ nginx_ssl_cert_dir }}/gitea.csr"
+nginx_server_name: "{{ gitea_domain }}"
+
+# --- fail2ban ---
+fail2ban_conf_file: /etc/fail2ban/filter.d/gitea.conf
+fail2ban_jail_file: /etc/fail2ban/jail.d/jail.local
+
+# --- Maria DB ---
+mariadb_secure_installation: yes
+
+# --- Let's Encrypt ---
+letsencrypt_name: gitea
+letsencrypt_mail: letsencrypt@example.com

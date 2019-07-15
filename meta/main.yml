@@ -1,0 +1,32 @@
+---
+galaxy_info:
+  author: Melvin Suter
+  company: 
+  description: Install gitea and configure single server instance
+  role_name: gitea
+  min_ansible_version: 2.4
+  license: GPL
+  platforms:
+  - name: EL
+    versions:
+    - 7
+  galaxy_tags:
+  - gitea
+
+dependencies:
+  - role: "uniqconsulting.mariadb"
+    vars:
+      mariadb_secure_installation: yes
+      mariadb_databases:
+        - name: "{{ gitea_mysql_database }}"
+          state: present
+          collation: utf8_general_ci
+          encoding: utf8
+      mariadb_users_create:
+        - name: "{{ gitea_mysql_database }}"
+          password: "{{ gitea_mysql_pass }}"
+          hosts:
+            - "localhost"
+          privs:
+            - "{{ gitea_mysql_database }}.*:ALL"          
+          append_privs: no

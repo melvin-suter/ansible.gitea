@@ -1,0 +1,50 @@
+APP_NAME = Gitea
+RUN_USER = {{ gitea_service_user }}
+RUN_MODE = prod
+
+[repository]
+ROOT = {{ gitea_repo_dir }}
+
+[server]
+PROTOCOL = http
+ROOT_URL = {{ gitea_url }}
+DOMAIN = {{ gitea_domain }}
+HTTP_ADDR = {{ gitea_bind_address }}
+HTTP_PORT = {{ gitea_bind_port }}
+SSH_DOMAIN = {{ gitea_ssh_domain }}
+SSH_LISTEN_HOST = {{ gitea_ssh_bind_address }}
+SSH_PORT = {{ gitea_ssh_port }}
+
+[database]
+DB_TYPE = mysql
+HOST = {{ gitea_mysql_host }}
+NAME = {{ gitea_mysql_database }}
+USER = {{ gitea_mysql_user }}
+PASSWD = {{ gitea_mysql_pass }}
+
+[log]
+ROOT_PATH = {{ gitea_log_dir }}
+MODE = file
+
+[mailer]
+ENABLED = false
+
+[service]
+REGISTER_EMAIL_CONFIRM            = false
+ENABLE_NOTIFY_MAIL                = false
+DISABLE_REGISTRATION              = true
+ALLOW_ONLY_EXTERNAL_REGISTRATION  = false
+ENABLE_CAPTCHA                    = false
+REQUIRE_SIGNIN_VIEW               = false
+DEFAULT_KEEP_EMAIL_PRIVATE        = false
+DEFAULT_ALLOW_CREATE_ORGANIZATION = true
+DEFAULT_ENABLE_TIMETRACKING       = true
+NO_REPLY_ADDRESS                  = noreply.example.org
+
+
+[openid]
+ENABLE_OPENID_SIGNIN = false
+ENABLE_OPENID_SIGNUP = false
+
+[attachment]
+ALLOWED_TYPES = application/gzip|application/x-gzip|application/x-gtar|application/x-tgz

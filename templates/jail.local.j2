@@ -1,0 +1,9 @@
+[gitea]
+enabled = true
+port = http,https
+filter = gitea
+logpath = {{ gitea_log_dir }}/gitea.log
+maxretry = 15
+findtime = 3600
+bantime = 900
+action = iptables-allports

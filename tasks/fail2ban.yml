@@ -1,0 +1,28 @@
+---
+
+  - name: Install fail2ban
+    yum:
+      name: fail2ban 
+      state: installed
+
+  - name: Install fail2ban-systemd
+    yum:
+      name: fail2ban-systemd 
+      state: installed
+      
+  - name: Copy fail2ban config
+    template:
+      src: templates/fail2ban_gitea.conf.j2
+      dest: "{{ fail2ban_conf_file }}"
+      
+  - name: Copy fail2ban jail
+    template:
+      src: templates/jail.local.j2
+      dest: "{{ fail2ban_jail_file }}"
+
+  - name: Enable and Start fail2ban
+    systemd:
+      name: fail2ban
+      state: restarted
+      enabled: yes
+...

@@ -1,0 +1,62 @@
+---
+  - name: Create user 'gitea'
+    user:
+      name: gitea
+      comment: Gitea
+      system: true
+      create_home: true
+
+  - name: Create gitea working dir
+    file:
+      state: directory
+      path: "{{ gitea_working_dir }}"
+      owner: "{{ gitea_service_user }}"
+      group: "{{ gitea_service_group }}"
+      mode: '0750'
+      recurse: yes
+
+  - name: Create gitea repo dir
+    file:
+      state: directory
+      path: "{{ gitea_repo_dir }}"
+      owner: "{{ gitea_service_user }}"
+      group: "{{ gitea_service_group }}"
+      mode: '0750'
+      recurse: yes
+
+  - name: Create gitea log dir
+    file:
+      state: directory
+      path: "{{ gitea_log_dir }}"
+      owner: "{{ gitea_service_user }}"
+      group: "{{ gitea_service_group }}"
+      mode: '0750'
+      recurse: yes
+
+  - name: Create gitea bin dir
+    file:
+      state: directory
+      path: "{{ gitea_bin_dir }}"
+      owner: "{{ gitea_service_user }}"
+      group: "{{ gitea_service_group }}"
+      mode: '0750'
+      recurse: yes
+
+  - name: Create nginx ssl dir
+    file:
+      state: directory
+      path: "{{ nginx_ssl_cert_dir }}"
+      owner: "{{ nginx_service_user }}"
+      group: "{{ nginx_service_group }}"
+      mode: '0750'
+      recurse: yes
+
+  - name: Set SELinux Label for ssl dir
+    sefcontext:
+      target: "{{ nginx_ssl_cert_dir }}(/.*)?"
+      setype: cert_t
+      state: present
+
+  - name: Apply new SELinux file context to filesystem
+    command: "restorecon -irv { nginx_ssl_cert_dir }}"
+...

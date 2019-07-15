@@ -1,0 +1,16 @@
+---
+  - name: Remove old git
+    yum:
+      name: git
+      state: absent
+
+  - name: Install git2u repo
+    yum:
+      name: https://rhel7.iuscommunity.org/ius-release.rpm
+      state: present
+
+  - name: Install git2u
+    yum:
+      name: git2u
+      state: present
+...

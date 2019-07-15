@@ -1,0 +1,66 @@
+---
+
+  - name: Download Gitea
+    get_url:
+      url: https://dl.gitea.io/gitea/1.8.3/gitea-1.8.3-linux-amd64
+      dest: "{{ gitea_bin_dir }}/gitea"
+      owner: "{{ gitea_service_user }}"
+      group: "{{ gitea_service_group }}"
+      mode: '0750'
+
+  - name: Check if gitea config exists
+    stat: 
+      path: "{{ gitea_config_file }}"
+    register: gitea_config_stat
+
+  - name: Process if gitea config exists
+    fail:
+       msg: "Config hasn't been replaced and might need manual change. Use gitea_config_overwrite: yes if you want to replace file"
+    when: "gitea_config_stat.stat.exists == true and gitea_config_overwrite == 'no'"
+    ignore_errors: yes
+
+  - name: Copy Gitea config file
+    template:
+      src: templates/config.ini.j2
+      owner: "{{ gitea_service_user }}"
+      group: "{{ gitea_service_group }}"
+      dest: "{{ gitea_config_file }}"
+      mode: '0640'
+    ignore_errors: yes
+    when: "gitea_config_stat.stat.exists == false or gitea_config_overwrite == 'yes'"
+
+
+  - name: Copy service file
+    template:
+      src: templates/gitea.service.j2
+      owner: root
+      group: root
+      dest: /etc/systemd/system/gitea.service
+
+  - name: Copy backup script
+    template:
+      src: templates/backup.sh.j2
+      dest: "{{ gitea_bin_dir }}/backup.sh"
+      owner: "{{ gitea_service_user }}"
+      group: "{{ gitea_service_group }}"
+      mode: '0750'
+
+  - name: Creates a cron file under /etc/cron.d
+    cron:
+      name: Backup Gitea
+      minute: 0
+      hour: 3
+      user: "{{ gitea_service_user }}"
+      job: "{{ gitea_bin_dir }}/backup.sh > /dev/null"
+      cron_file: gitea-backup
+
+  - name: systemd reload
+    systemd:
+      daemon_reload: yes
+
+  - name: Enable and Start gitea
+    systemd:
+      name: gitea
+      state: restarted
+      enabled: yes
+...

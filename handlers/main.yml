@@ -1,0 +1,29 @@
+---
+- name: gitea started
+  service: name=gitea state=started
+
+- name: gitea stopped
+  service: name=gitea state=stopped
+
+- name: gitea restarted
+  service: name=gitea state=restarted
+
+- name: mariadb started
+  service: name=mariadb state=started
+
+- name: mariadb stopped
+  service: name=mariadb state=stopped
+
+- name: mariadb restarted
+  service: name=mariadb state=restarted
+
+- name: nginx started
+  service: name=mongod state=started
+
+- name: nginx stopped
+  service: name=mongod state=stopped
+
+- name: nginx restarted
+  service: name=mongod state=restarted
+
+...

@@ -1,0 +1,20 @@
+export GITEA_WORK_DIR={{ gitea_working_dir }}
+
+[Unit]
+Description=Gitea (Git with a cup of tea)
+After=syslog.target
+After=network.target
+Requires=mariadb.service
+
+[Service]
+RestartSec=2s
+Type=simple
+User={{ gitea_service_user }}
+Group={{ gitea_service_group }}
+WorkingDirectory={{ gitea_working_dir }}
+ExecStart={{ gitea_bin_dir }}/gitea web -c {{ gitea_config_file }}
+Restart=always
+Environment=GITEA_WORK_DIR="{{ gitea_working_dir }}"
+
+[Install]
+WantedBy=multi-user.target
