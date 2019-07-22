@@ -15,6 +15,7 @@ gitea_bin_dir: /opt/gitea/bin
 gitea_working_dir: /opt/gitea/data
 gitea_repo_dir: "{{ gitea_working_dir }}/repos"
 gitea_log_dir: "{{ gitea_working_dir }}/logs"
+gitea_custom_dir: "{{ gitea_working_dir }}/custom"
 gitea_backup_dir: /opt/gitea/backups
 gitea_service_user: gitea
 gitea_service_group: gitea
