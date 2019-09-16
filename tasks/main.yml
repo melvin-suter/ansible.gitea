@@ -25,4 +25,5 @@
 # letsencrypt installation
 - import_tasks: letsencrypt.yml
   tags: ['gitea','gitea.letsencrypt']
+  when: letsencrypt_setup == true
 ...

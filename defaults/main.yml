@@ -47,5 +47,6 @@ fail2ban_jail_file: /etc/fail2ban/jail.d/jail.local
 mariadb_secure_installation: yes
 
 # --- Let's Encrypt ---
+letsencrypt_setup: yes
 letsencrypt_name: gitea
 letsencrypt_mail: letsencrypt@example.com
