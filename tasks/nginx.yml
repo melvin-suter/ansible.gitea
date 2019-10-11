@@ -38,15 +38,11 @@
       zone: public
       service: "{{ item }}"
       permanent: yes
+      immediate: yes
       state: enabled
     with_items:
       - https
       - http
-
-      
-  - name: Restart firewall
-    systemd:
-      name: firewalld
-      state: restarted
-
+    ignore_errors: yes
+    
 ...
