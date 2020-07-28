@@ -40,6 +40,7 @@ nginx_ssl_csr: "{{ nginx_ssl_cert_dir }}/gitea.csr"
 nginx_server_name: "{{ gitea_domain }}"
 
 # --- fail2ban ---
+fail2ban_setup: yes
 fail2ban_conf_file: /etc/fail2ban/filter.d/gitea.conf
 fail2ban_jail_file: /etc/fail2ban/jail.d/jail.local
 
