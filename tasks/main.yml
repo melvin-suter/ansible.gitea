@@ -9,6 +9,7 @@
 # git verison 2 installation
 - import_tasks: git2u.yml
   tags: ['gitea','gitea.git2u']
+  when: ansible_distribution_major_version == 7
 
 # giteat installation
 - import_tasks: gitea.yml
