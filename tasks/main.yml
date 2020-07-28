@@ -21,6 +21,7 @@
 # fail2ban installation
 - import_tasks: fail2ban.yml
   tags: ['gitea','gitea.fail2ban']
+  when: fail2ban_setup == true
 
 # letsencrypt installation
 - import_tasks: letsencrypt.yml
