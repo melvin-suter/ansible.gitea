@@ -1,0 +1,9 @@
+---
+# file: test/playbook_gitea.yml
+- name: Install and configure Gitea Server
+  hosts: localhost
+  roles:
+    - melvin_suter.gitea
+ 
+
+...
