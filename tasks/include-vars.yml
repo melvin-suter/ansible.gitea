@@ -1,9 +1,22 @@
 ---
-- name: check if local var file "/etc/ansible/{{ ansible_nodename }}.yml" exists
-  stat:
-    path: "/etc/ansible/{{ ansible_nodename }}.yml"
-  register: local_varfile
-- name: Load a variable file "/etc/ansible/{{ ansible_nodename }}.yml"
-  include_vars: "/etc/ansible/{{ ansible_nodename }}.yml"
-  when: local_varfile.stat.exists
 
+- name: get role-vars stats
+  stat:
+    path: "{{ playbook_dir }}/vars/99_{{ role_name }}.yml"
+  register: role_stat_result
+
+- name: include role-vars
+  include_vars: "{{ playbook_dir }}/vars/99_{{ role_name }}.yml"
+  when: role_stat_result.stat.exists
+
+
+- name: get global-vars stats
+  stat:
+    path: "{{ playbook_dir }}/vars/0_global.yml"
+  register: global_stat_result
+
+- name: include global-vars
+  include_vars: "{{ playbook_dir }}/vars/0_global.yml"
+  when: global_stat_result.stat.exists
+
+...
