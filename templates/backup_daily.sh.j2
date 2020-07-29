@@ -1,0 +1,18 @@
+#!/bin/bash
+
+DIRNAME=gitea-dump-$(date +%s)
+DIRPATH=/opt/gitea/backups/temp/$DIRNAME
+SETNAME=/opt/gitea/backups/gitea_daily_$(date +%d).tar.gz
+
+rm -f $SETNAME
+mkdir -p $DIRPATH
+
+cp /opt/gitea/config.ini $DIRPATH/config.ini
+cd $(dirname /opt/gitea/data)
+tar -czf $DIRPATH/data_dir.tar.gz $(basename /opt/gitea/data)
+mysqldump gitea > $DIRPATH/gitea-db.sql
+gzip $DIRPATH/gitea-db.sql
+
+cd $(dirname $DIRPATH)
+tar -czf $SETNAME $DIRNAME
+rm -rf $DIRPATH
