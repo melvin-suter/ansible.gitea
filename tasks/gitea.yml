@@ -39,8 +39,16 @@
 
   - name: Copy backup script
     template:
-      src: templates/backup.sh.j2
-      dest: "{{ gitea_bin_dir }}/backup.sh"
+      src: templates/backup_monthly.sh.j2
+      dest: "{{ gitea_bin_dir }}/backup_monthly.sh"
+      owner: "{{ gitea_service_user }}"
+      group: "{{ gitea_service_group }}"
+      mode: '0750'
+      
+  - name: Copy backup script
+    template:
+      src: templates/backup_daily.sh.j2
+      dest: "{{ gitea_bin_dir }}/backup_daily.sh"
       owner: "{{ gitea_service_user }}"
       group: "{{ gitea_service_group }}"
       mode: '0750'
@@ -49,9 +57,19 @@
     cron:
       name: Backup Gitea
       minute: 0
+      hour: 5
+      day: 1
+      user: "{{ gitea_service_user }}"
+      job: "{{ gitea_bin_dir }}/backup_monthly.sh > /dev/null"
+      cron_file: gitea-backup
+
+  - name: Creates a cron file under /etc/cron.d
+    cron:
+      name: Backup Gitea
+      minute: 0
       hour: 3
       user: "{{ gitea_service_user }}"
-      job: "{{ gitea_bin_dir }}/backup.sh > /dev/null"
+      job: "{{ gitea_bin_dir }}/backup_daily.sh > /dev/null"
       cron_file: gitea-backup
 
   - name: systemd reload
